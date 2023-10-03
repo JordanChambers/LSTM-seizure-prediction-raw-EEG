@@ -76,17 +76,16 @@ def get_datafiles_patient(pat):
         ctmf = time.gmtime(ctm)
         filename = '/media/NVdata/Patient_%s/' % (pat) + time.strftime("Data_%Y_%m_%d/Hour_%H/UTC_%H_%M_00.mat", ctmf)
         jtake = 1
-        if filename not in goodfilelist:
-            try:
-                cfan = h5py.File(filename, 'r')
-                for jelec in range(16):
-                    cvn = np.count_nonzero(np.isnan(cfan['Data'][jelec,:]))
-                    if cvn > 400:
-                        jtake = 0
-                        continue
-                cfan.close()
-            except:
-                jtake = 0
+        try:
+            cfan = h5py.File(filename, 'r')
+            for jelec in range(16):
+                cvn = np.count_nonzero(np.isnan(cfan['Data'][jelec,:]))
+                if cvn > 400:
+                    jtake = 0
+                    continue
+            cfan.close()
+        except:
+            jtake = 0
         if jtake == 1:
             if psz == -1:
                 pszv = -1
